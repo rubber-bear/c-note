@@ -6,9 +6,10 @@
 
 int main() {
   int x;
-  int count[10];
+  const number = 10;
+  int count[number];
   int i;
-  for (i = 0; i < 10; i++) {
+  for (i = 0; i < number; i++) {
     count[i] = 0;
   }
   scanf("%d", &x);
@@ -18,7 +19,7 @@ int main() {
     }
     scanf("%d", &x);
   }
-  for (i = 0; i < 10; i++) {
+  for (i = 0; i < number; i++) {
     printf("%d: %d\n", i, count[i]);
   }
 }
