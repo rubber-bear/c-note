@@ -11,8 +11,34 @@
 
 指针最常见的错误：
   定义了指针变量，还没有指向任何变量，就开始使用指针
-*/
 
+指针与数组
+  传入函数的数组变成了什么？
+    函数参数表中的数组实际上就是指针
+      sizeof(a) == sizeof(int*)
+      但是可以使用数组的运算符【】进行运算
+
+  数组参数
+    以下四种函数的原型是等价的
+    int sum(int *ar, int n)
+    int sum(int *, int)
+    int sum(int ar[], int n)
+    int sum(int [], int)
+
+  数组变量是特殊的指针
+    数组变量本身表达地址
+      int a[10]; int *p = a  // 无需用&取地址
+      但是数组的单元表达的是变量，需要用&取地址
+      a == & a[0]
+    [] 运算符可以对数组做，也可以对指针做
+      p[0] <==> a[0]
+
+    运算符可以对指针做，也可以对数组做：
+      *a = 25
+    
+    数组变量是const的指针，所以不能被赋值 -> （因此，两个数组之间不能被赋值）
+      int a[] <==> int * const a= 
+*/
 
 # include <stdio.h>
 
@@ -28,18 +54,27 @@ int main() {
   // printf("a = %d, b= %d\n", a, b);
 
   // 场景2:
-  // int a[] = {1, 2, 3,4,5,6,7,8,12,14,15,18,21,23,};
-  // int min, max;
-  // minmax(a, sizeof(a) / sizeof(a[0]), &min, &max);
-  // printf("min=%d, max = %d\n", min, max);
+  int a[] = {1, 2, 3,4,5,6,7,8,12,14,15,18,21,23,};
+  int min, max;
+
+  printf("main sizeof(a) = %lu\n", sizeof(a));
+  printf("main a =%p\n", a);
+  minmax(a, sizeof(a) / sizeof(a[0]), &min, &max);
+  printf("a[0] = %d\n", a[0]);
+  printf("min=%d, max = %d\n", min, max);
+  int *p = &min;
+  printf("*p=%d\n", *p);
+  printf("p[0] =%d\n", p[0]); // 将p所指的地方当作数组
+
+  printf("*a = %d", *a);
 
   // 场景3:
-  int a = 5;
-  int b = 2;
-  int c;
-  if (divide(a,b,&c)) {
-    printf("%d/%d = %d\n", a, b, c);
-  }
+  // int a = 5;
+  // int b = 2;
+  // int c;
+  // if (divide(a,b,&c)) {
+  //   printf("%d/%d = %d\n", a, b, c);
+  // }
 
   return 0; 
 }
@@ -52,6 +87,9 @@ void swap(int *pa, int *pb) {
 
 void minmax(int a[], int len, int *min, int *max) {
   int i;
+  printf("minmax sizeof(a) = %lu\n", sizeof(a));
+  printf("minmax a =%p\n", a);
+  a[0] = 100000;
   *min = *max = a[0];
   for (i = 0; i < len; i++) {
     if (a[i] < *min) {
